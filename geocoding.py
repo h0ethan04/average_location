@@ -4,19 +4,20 @@ import json
 import time
 
 
-_BASE_URL = 'https://nominatim.openstreetmap.org/search?'
+_BASE_FORWARD_URL = 'https://nominatim.openstreetmap.org/search?'
+_BASE_REVERSE_URL = 'https://nominatim.openstreetmap.org/reverse?'
 
-class ForwardHTTPError(Exception):
+class HTTPError(Exception):
     """ Exception raised for HTTP errors """
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
-class ForwardURLError(Exception):
+class URLError(Exception):
     """ Exception raised for network errors"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
 
-class ForwardJSONError(Exception):
+class JSONError(Exception):
     """ Exception raised for json errors"""
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
@@ -48,7 +49,7 @@ class ForwardNominatimEncoding:
         try:
             encoded_params = urllib.parse.urlencode([('q', self._address), 
                                                         ('format', 'json')])
-            full_url = f'{_BASE_URL}{encoded_params}'
+            full_url = f'{_BASE_FORWARD_URL}{encoded_params}'
             request = urllib.request.Request(full_url,
                                                 headers={'Referer':'https://github.com/h0ethan04/h0ethan04'},
                                                 method='GET')        
@@ -58,13 +59,13 @@ class ForwardNominatimEncoding:
             self._coords = (float(decoded_data[0]['lat']), float(decoded_data[0]['lon']))
 
         except urllib.error.HTTPError as e:
-            raise ForwardHTTPError(f'HTTP {e.code}')
+            raise HTTPError(f'HTTP {e.code}')
         
         except urllib.error.URLError:
-            raise ForwardURLError('network error')
+            raise URLError('network error')
         
         except json.JSONDecodeError:
-            raise ForwardJSONError('incompatible json encoding detected')
+            raise JSONError('incompatible json encoding detected')
         
         except (KeyError, ValueError, IndexError, BadInputError):
             raise BadInputError('location could not be found')
@@ -74,4 +75,46 @@ class ForwardNominatimEncoding:
                 response.close()
         
 
+class ReverseEncoding:
 
+    def __init__(self, coords) -> None:
+        self._coords = coords
+        self._to_address()
+
+    def address(self):
+        return self._address
+    
+    def _to_address(self) -> None:
+        """ converts the address into coordinates"""
+
+        response = None
+        time.sleep(1)
+        try:
+            encoded_params = urllib.parse.urlencode([('lat', float(self._coords[0])),
+                                                     ('lon', float(self._coords[1])),
+                                                     ('format', 'json')])
+            full_url = f'{_BASE_REVERSE_URL}{encoded_params}'
+            request = urllib.request.Request(full_url,
+                                                headers={'Referer':'https://github.com/h0ethan04/h0ethan04'},
+                                                method='GET')        
+            response = urllib.request.urlopen(request)
+            encoded_data = response.read()
+            decoded_data = json.loads(encoded_data)
+            self._address = decoded_data['display_name']
+            
+
+        except urllib.error.HTTPError as e:
+            raise HTTPError(f'HTTP {e.code}')
+        
+        except urllib.error.URLError:
+            raise URLError('network error')
+        
+        except json.JSONDecodeError:
+            raise JSONError('incompatible json encoding detected')
+        
+        except (KeyError, ValueError, IndexError, BadInputError):
+            raise BadInputError('location could not be found')
+        
+        finally:
+            if response is not None:
+                response.close()

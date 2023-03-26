@@ -16,6 +16,7 @@ def read_locations() -> Iterable[str] | int:
         address = input("Enter an address, or press 'enter' to end: \n")
         if address == "":
             break
+        print()
         yield address
 
 
