@@ -1,4 +1,4 @@
-
+import time
 from time import process_time_ns
 from time import sleep
 from statistics import fmean
@@ -24,9 +24,11 @@ def main():
         print()
         print(f'West edge: {geocoding.ReverseEncoding(distance_calculator.calculate_coordinates(center_address.coords(), 270, mean)).address()}')
 
-
     except Exception as e:
         print(' '.join(e.args))
+
+    finally:
+        input("Press 'enter' to exit the program")
 
 
 
