@@ -1,7 +1,7 @@
-
+from typing import Iterable
 import math
 
-def calculate_distance(center: tuple[int|float, int|float],
+def _calculate_equirectangular_distance(center: tuple[int|float, int|float],
                         point: tuple[int|float, int|float]) -> int|float:
     ''' calculates the equirectangular distance between two objects'''
     lat1, long1 = center
@@ -15,3 +15,7 @@ def calculate_distance(center: tuple[int|float, int|float],
     return d
 
 
+def calculate_distance(center, points: Iterable) -> Iterable[float]:
+    """ calculates the average distance between all of the values"""
+    for point in points:
+        yield _calculate_equirectangular_distance(center, point)

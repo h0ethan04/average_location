@@ -1,6 +1,7 @@
 import urllib.request
 import urllib.parse
 import json
+import time
 
 
 _BASE_URL = 'https://nominatim.openstreetmap.org/search?'
@@ -33,15 +34,17 @@ class ForwardNominatimEncoding:
         """ creates an object that converts
         an address to latitude and longitude """
         self._address = address
-        self._x = None
-        self._y = None
+        self._coords = None
+        self._to_coords()
 
+    def coords(self) -> tuple[float, float]:
+        return self._coords
 
-    def to_coords(self) -> None:
+    def _to_coords(self) -> None:
         """ converts the address into coordinates"""
-        
-        response = None
 
+        response = None
+        time.sleep(1)
         try:
             encoded_params = urllib.parse.urlencode([('q', self._address), 
                                                         ('format', 'json')])
@@ -52,7 +55,7 @@ class ForwardNominatimEncoding:
             response = urllib.request.urlopen(request)
             encoded_data = response.read()
             decoded_data = json.loads(encoded_data)
-            self._center = (float(decoded_data[0]['lat']), float(decoded_data[0]['lon']))
+            self._coords = (float(decoded_data[0]['lat']), float(decoded_data[0]['lon']))
 
         except urllib.error.HTTPError as e:
             raise ForwardHTTPError(f'HTTP {e.code}')
@@ -64,7 +67,7 @@ class ForwardNominatimEncoding:
             raise ForwardJSONError('incompatible json encoding detected')
         
         except (KeyError, ValueError, IndexError, BadInputError):
-            raise BadInputError('non-existent location was entered, try again')
+            raise BadInputError('location could not be found')
         
         finally:
             if response is not None:

@@ -1,4 +1,4 @@
-from collections import Iterable
+from typing import Iterable
 
 def read_central_location() -> str:
     """ reads the starting location
@@ -15,7 +15,7 @@ def read_locations() -> Iterable[str] | int:
     while True:
         address = input("Enter an address, or press 'enter' to end: \n")
         if address == "":
-            return 0
+            break
         yield address
 
 
