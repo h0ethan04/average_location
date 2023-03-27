@@ -5,7 +5,7 @@ from pathlib import Path
 
 def read_path() -> Path:
     """ reads a path from the input"""
-    return Path(input("Enter the name of the file: "))
+    return Path(input("Enter the name of the file: ").strip())
 
 
 def _generate_lines(path: Path) -> typing.Iterable[str]:
