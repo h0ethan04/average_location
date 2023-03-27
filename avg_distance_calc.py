@@ -18,6 +18,7 @@ def main():
         print(f'East edge: {ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 90, mean)).address()}')
         print()
         print(f'West edge: {ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 270, mean)).address()}')
+        print('.....')
     except Exception as e:
         print(' '.join(e.args))
 
