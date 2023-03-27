@@ -1,10 +1,7 @@
-import time
-from time import process_time_ns
-from time import sleep
 from statistics import fmean
-import distance_calculator
-import geocoding
-import input_reading
+import calculator.distance_calculator as distance_calculator
+import calculator.geocoding as geocoding
+import calculator.input_reading as input_reading
 
 def main():
     try:
