@@ -13,11 +13,11 @@ def main():
         print('.....')
         print(f'North edge: {ReverseEncoding(calculate_coordinates(center_coords, 0, mean)).address()}')
         print()
-        print(f'South edge: {geocoding.ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 180, mean)).address()}')
+        print(f'South edge: {ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 180, mean)).address()}')
         print()
-        print(f'East edge: {geocoding.ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 90, mean)).address()}')
+        print(f'East edge: {ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 90, mean)).address()}')
         print()
-        print(f'West edge: {geocoding.ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 270, mean)).address()}')
+        print(f'West edge: {ReverseEncoding(distance_calculator.calculate_coordinates(center_coords, 270, mean)).address()}')
     except Exception as e:
         print(' '.join(e.args))
 

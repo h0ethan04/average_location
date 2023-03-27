@@ -17,7 +17,7 @@ def parse_for_locations(path: Path):
     """ parses the lines and yields the addresses of each line"""
     for address in _generate_lines(path):
         address = address.strip()
-        if address.lower().startswith('center') or address.lower().startswith('locations') or address == "":
+        if address.lower().startswith('center') or address.lower().startswith('location') or address == "":
             pass
         else:
             yield address
