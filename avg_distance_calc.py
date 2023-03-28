@@ -21,7 +21,7 @@ def main():
         print()
         print('.....')
     except Exception as e:
-        print(' '.join(e.args))
+        print(str(e))
 
     finally:
         input("Press 'enter' to exit the program")
